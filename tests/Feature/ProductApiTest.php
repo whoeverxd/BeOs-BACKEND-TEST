@@ -194,4 +194,40 @@ class ProductApiTest extends TestCase
                 'message' => 'Recurso no encontrado',
             ]);
     }
+
+    public function test_update_validation_errors_are_returned_as_json_even_when_html_is_requested(): void
+    {
+        $currency = Currency::create([
+            'name' => 'Peso colombiano',
+            'symbol' => 'COP',
+            'exchange_rate' => 1,
+        ]);
+
+        $product = Product::create([
+            'name' => 'Laptop Pro 14',
+            'description' => 'Laptop profesional de 14 pulgadas para trabajo y desarrollo.',
+            'price' => 1499,
+            'currency_id' => $currency->id,
+            'tax_cost' => 284.81,
+            'manufacturing_cost' => 890,
+        ]);
+
+        $this->put("/api/products/{$product->id}", [
+            'description' => 'Laptop profesional de 14 pulgadas para trabajo y desarrollo.',
+            'price' => 1499,
+            'currency_id' => $currency->id,
+            'tax_cost' => 284.81,
+            'manufacturing_cost' => 890,
+        ], [
+            'Accept' => 'text/html',
+        ])
+            ->assertUnprocessable()
+            ->assertHeader('content-type', 'application/json')
+            ->assertJson([
+                'message' => 'Los datos enviados no son validos.',
+                'errors' => [
+                    'name' => ['The name field is required.'],
+                ],
+            ]);
+    }
 }

@@ -4,6 +4,21 @@
 
 # Decisiones técnicas
     - He Cambiado los nombre de los modelos a ingles para mantener la coherencia, ya que los campos estan en español. Suelo ser mas purista y respetar las instrucciones y nombres del proyecto pero en este caso me di la libertad para lograr algo mas elegante.
+    - las rutas como  path: '/api/products/{id}', usan Usar Route Model Binding para manejar 404 automáticamente es buena práctica, limpia y segura. pero considero que al ser un API REST deberia implementar public function render($request, Throwable $exception)
+        {
+            if ($exception instanceof ModelNotFoundException) {
+                return response()->json([
+                    'message' => 'Recurso no encontrado'
+                ], 404);
+            }
+
+            return parent::render($request, $exception);
+        }
+    Para mantener la consistencia.
+
+    como resolucion Ajusté el manejo global de excepciones para que las rutas de la API respondan JSON en errores 404, tanto cuando falla el route model binding como cuando la ruta API no existe
+
+    #tambien hice ajuste global en el bootstrap para ValidationException
 
 # Estructura del proyecto
     project/
@@ -14,6 +29,7 @@
     │
     ├── docs/
     │   ├── postman_collection.json
+        tests/
 
     │
     ├── README.md
