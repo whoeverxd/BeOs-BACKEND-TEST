@@ -27,13 +27,14 @@
                         - currency_id = 2, price = 950 (EUR)
                         - currency_id = 3, price = 850 (GBP)
     - Ademas se verifica que no pueda haber mas de un precio en la misma moneda para un producto. incluyendo el precio base
-      - si por ejemplo la moneda esta en dolares, y el precio es $500. entonces no permitire que se añada otra moneda/precio en dolares
+      - si por ejemplo la moneda esta en dolares, y el precio es $500. entonces no permitiremos que se añada otra moneda/precio en dolares
 
     # Decisiones sobre la logica 
 
         - tax_cost <= price → el impuesto no puede ser mayor al precio.
         - manufacturing_cost <= price → el costo de fabricación no puede exceder el precio de venta.
         - price >= 0 → no tener precios negativos
+        - Campos decimales como price, tax_cost y manufacturing_cost pueden enviarse como strings numéricos en JSON y Laravel los valida correctamente con numeric.
 
 # Estructura del proyecto
     project/

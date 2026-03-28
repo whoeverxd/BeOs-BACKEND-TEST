@@ -74,6 +74,38 @@ class ProductApiTest extends TestCase
         ]);
     }
 
+    public function test_decimal_product_fields_can_be_sent_as_numeric_strings(): void
+    {
+        $currency = Currency::create([
+            'name' => 'Dolar estadounidense',
+            'symbol' => 'USD',
+            'exchange_rate' => 1,
+        ]);
+
+        $response = $this->postJson('/api/products', [
+            'name' => 'Monitor String Price',
+            'description' => 'Producto enviado con decimales como string.',
+            'price' => '399.99',
+            'currency_id' => $currency->id,
+            'tax_cost' => '76.50',
+            'manufacturing_cost' => '220.10',
+        ]);
+
+        $response
+            ->assertCreated()
+            ->assertJsonPath('price', '399.99')
+            ->assertJsonPath('tax_cost', '76.50')
+            ->assertJsonPath('manufacturing_cost', '220.10');
+
+        $this->assertDatabaseHas('products', [
+            'name' => 'Monitor String Price',
+            'currency_id' => $currency->id,
+            'price' => 399.99,
+            'tax_cost' => 76.50,
+            'manufacturing_cost' => 220.10,
+        ]);
+    }
+
     public function test_a_product_can_be_retrieved_updated_and_deleted(): void
     {
         $currency = Currency::create([
@@ -119,6 +151,48 @@ class ProductApiTest extends TestCase
 
         $this->assertDatabaseMissing('products', [
             'id' => $product->id,
+        ]);
+    }
+
+    public function test_deleting_a_product_cascades_its_product_prices(): void
+    {
+        $baseCurrency = Currency::create([
+            'name' => 'Dolar estadounidense',
+            'symbol' => 'USD',
+            'exchange_rate' => 1,
+        ]);
+
+        $eurCurrency = Currency::create([
+            'name' => 'Euro',
+            'symbol' => 'EUR',
+            'exchange_rate' => 0.92,
+        ]);
+
+        $product = Product::create([
+            'name' => 'Laptop Cascade',
+            'description' => 'Producto para probar cascade delete.',
+            'price' => 1000,
+            'currency_id' => $baseCurrency->id,
+            'tax_cost' => 120,
+            'manufacturing_cost' => 500,
+        ]);
+
+        ProductPrice::create([
+            'product_id' => $product->id,
+            'currency_id' => $eurCurrency->id,
+            'price' => 950,
+        ]);
+
+        $product->delete();
+
+        $this->assertDatabaseMissing('product_prices', [
+            'product_id' => $product->id,
+            'currency_id' => $baseCurrency->id,
+        ]);
+
+        $this->assertDatabaseMissing('product_prices', [
+            'product_id' => $product->id,
+            'currency_id' => $eurCurrency->id,
         ]);
     }
 
@@ -235,6 +309,65 @@ class ProductApiTest extends TestCase
             'product_id' => $product->id,
             'currency_id' => $eurCurrency->id,
             'price' => 950,
+        ]);
+    }
+
+    public function test_deleting_a_currency_cascades_related_products_and_product_prices(): void
+    {
+        $usdCurrency = Currency::create([
+            'name' => 'Dolar estadounidense',
+            'symbol' => 'USD',
+            'exchange_rate' => 1,
+        ]);
+
+        $eurCurrency = Currency::create([
+            'name' => 'Euro',
+            'symbol' => 'EUR',
+            'exchange_rate' => 0.92,
+        ]);
+
+        $productWithUsdBase = Product::create([
+            'name' => 'Laptop USD',
+            'description' => 'Producto base USD.',
+            'price' => 1000,
+            'currency_id' => $usdCurrency->id,
+            'tax_cost' => 120,
+            'manufacturing_cost' => 500,
+        ]);
+
+        $productWithEurBase = Product::create([
+            'name' => 'Laptop EUR',
+            'description' => 'Producto base EUR.',
+            'price' => 900,
+            'currency_id' => $eurCurrency->id,
+            'tax_cost' => 100,
+            'manufacturing_cost' => 450,
+        ]);
+
+        ProductPrice::create([
+            'product_id' => $productWithUsdBase->id,
+            'currency_id' => $eurCurrency->id,
+            'price' => 950,
+        ]);
+
+        $eurCurrency->delete();
+
+        $this->assertDatabaseHas('products', [
+            'id' => $productWithUsdBase->id,
+        ]);
+
+        $this->assertDatabaseMissing('products', [
+            'id' => $productWithEurBase->id,
+        ]);
+
+        $this->assertDatabaseMissing('product_prices', [
+            'product_id' => $productWithUsdBase->id,
+            'currency_id' => $eurCurrency->id,
+        ]);
+
+        $this->assertDatabaseMissing('product_prices', [
+            'product_id' => $productWithEurBase->id,
+            'currency_id' => $eurCurrency->id,
         ]);
     }
 
