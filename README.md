@@ -52,18 +52,38 @@
     ├── README.md
 
 
-Modelos 
-+----------------+           +----------------+           +-------------------+
-|    Currency    |           |     Product    |           |   ProductPrice    |
-+----------------+           +----------------+           +-------------------+
-| id             |<--------->| currency_id    |           | id                |
-| name           |  belongsTo| id             |<--------->| product_id        |
-| symbol         |  (Product)| name           | hasMany   | currency_id       |
-| exchange_rate  |           | description    |           | price             |
-+----------------+           | price          |           +-------------------+
-                             | tax_cost       |
-                             | manufacturing_cost |
-                             +----------------+
+## Modelos
+
+```mermaid
+erDiagram
+    CURRENCY ||--o{ PRODUCT : "base currency"
+    PRODUCT ||--o{ PRODUCT_PRICE : "has many"
+    CURRENCY ||--o{ PRODUCT_PRICE : "priced in"
+
+    CURRENCY {
+        int id
+        string name
+        string symbol
+        decimal exchange_rate
+    }
+
+    PRODUCT {
+        int id
+        string name
+        text description
+        decimal price
+        int currency_id
+        decimal tax_cost
+        decimal manufacturing_cost
+    }
+
+    PRODUCT_PRICE {
+        int id
+        int product_id
+        int currency_id
+        decimal price
+    }
+```
 
 # Explicación de las relaciones
     Product → Currency
