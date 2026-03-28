@@ -90,7 +90,14 @@ Notas
 • La API debe devolver los datos en formato JSON.
 • La API debe tener una documentación clara y concisa.
 
-# posibles mejoras
+
+# Seguridad
+    *se uso eloquent y query builder 
+    *se validan los inputs 
+    *se aplican restricciones de base de datos y relaciones foraneas
+    *manejo claro de errores
+
+# Posibles mejoras
     - soft delete
     - laravel sanctum + auth
 
