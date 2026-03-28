@@ -19,8 +19,15 @@
     como resolucion Ajusté el manejo global de excepciones para que las rutas de la API respondan JSON en errores 404, tanto cuando falla el route model binding como cuando la ruta API no existe
 
     - tambien hice ajuste global en el bootstrap para ValidationException
-    - 
-
+    - Pienso en usar price en products como “precio base” => product_prices almacenará precios en otras divisas.
+          - ejemplo : product.price = 1000
+                      product.currency_id = 1 (USD)
+                        product_prices: 
+                        - currency_id = 1, price = 1000 (precio base)
+                        - currency_id = 2, price = 950 (EUR)
+                        - currency_id = 3, price = 850 (GBP)
+    - Ademas se verifica que no pueda haber mas de un precio en la misma moneda para un producto. incluyendo el precio base
+      - si por ejemplo la moneda esta en dolares, y el precio es $500. entonces no permitire que se añada otra moneda/precio en dolares
 
     # Decisiones sobre la logica 
 

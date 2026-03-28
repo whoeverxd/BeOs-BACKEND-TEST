@@ -108,6 +108,8 @@ class ProductPriceController extends Controller
                 ),
             ],
             'price' => ['required', 'numeric'],
+        ], [
+            'currency_id.unique' => 'Ya existe un precio registrado para esta moneda en este producto.',
         ]);
 
         $price = $product->prices()->create($validated)->load(['product', 'currency']);

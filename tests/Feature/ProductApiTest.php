@@ -238,6 +238,36 @@ class ProductApiTest extends TestCase
         ]);
     }
 
+    public function test_product_price_currency_must_be_unique_per_product(): void
+    {
+        $baseCurrency = Currency::create([
+            'name' => 'Dolar estadounidense',
+            'symbol' => 'USD',
+            'exchange_rate' => 1,
+        ]);
+
+        $product = Product::create([
+            'name' => 'Laptop Base',
+            'description' => 'Producto con precio base.',
+            'price' => 1000,
+            'currency_id' => $baseCurrency->id,
+            'tax_cost' => 120,
+            'manufacturing_cost' => 500,
+        ]);
+
+        $this->postJson("/api/products/{$product->id}/prices", [
+            'currency_id' => $baseCurrency->id,
+            'price' => 1000,
+        ])
+            ->assertUnprocessable()
+            ->assertJson([
+                'message' => 'Los datos enviados no son validos.',
+                'errors' => [
+                    'currency_id' => ['Ya existe un precio registrado para esta moneda en este producto.'],
+                ],
+            ]);
+    }
+
     public function test_validation_errors_are_returned_as_json(): void
     {
         $response = $this->postJson('/api/products', []);
