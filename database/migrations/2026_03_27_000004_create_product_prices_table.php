@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('currency_id')->constrained('currencies');
             $table->decimal('price', 12, 2);
             $table->timestamps();
+
+            $table->unique(['product_id', 'currency_id']);
         });
     }
 
