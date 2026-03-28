@@ -182,4 +182,16 @@ class ProductApiTest extends TestCase
                 'manufacturing_cost',
             ]);
     }
+
+    public function test_missing_product_is_returned_as_json_even_when_html_is_requested(): void
+    {
+        $this->get('/api/products/999999', [
+            'Accept' => 'text/html',
+        ])
+            ->assertNotFound()
+            ->assertHeader('content-type', 'application/json')
+            ->assertExactJson([
+                'message' => 'Recurso no encontrado',
+            ]);
+    }
 }
