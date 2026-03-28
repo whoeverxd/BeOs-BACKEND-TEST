@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Product extends Model
+class ProductPrice extends Model
 {
     use HasFactory;
 
@@ -17,12 +16,9 @@ class Product extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'description',
-        'price',
+        'product_id',
         'currency_id',
-        'tax_cost',
-        'manufacturing_cost',
+        'price',
     ];
 
     /**
@@ -33,20 +29,19 @@ class Product extends Model
     protected function casts(): array
     {
         return [
-            'price' => 'decimal:2',
+            'product_id' => 'integer',
             'currency_id' => 'integer',
-            'tax_cost' => 'decimal:2',
-            'manufacturing_cost' => 'decimal:2',
+            'price' => 'decimal:2',
         ];
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 
     public function currency(): BelongsTo
     {
         return $this->belongsTo(Currency::class);
-    }
-
-    public function prices(): HasMany
-    {
-        return $this->hasMany(ProductPrice::class);
     }
 }

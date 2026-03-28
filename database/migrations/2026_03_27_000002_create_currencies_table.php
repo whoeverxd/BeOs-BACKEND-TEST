@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('currencies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description');
-            $table->decimal('price', 12, 2);
-            $table->foreignId('currency_id')->constrained('currencies');
-            $table->decimal('tax_cost', 12, 2);
-            $table->decimal('manufacturing_cost', 12, 2);
+            $table->string('symbol');
+            $table->decimal('exchange_rate', 12, 6);
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('currencies');
     }
 };
