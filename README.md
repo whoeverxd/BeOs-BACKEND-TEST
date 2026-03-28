@@ -18,7 +18,15 @@
 
     como resolucion Ajusté el manejo global de excepciones para que las rutas de la API respondan JSON en errores 404, tanto cuando falla el route model binding como cuando la ruta API no existe
 
-    #tambien hice ajuste global en el bootstrap para ValidationException
+    - tambien hice ajuste global en el bootstrap para ValidationException
+    - 
+
+
+    # Decisiones sobre la logica 
+
+        - tax_cost <= price → el impuesto no puede ser mayor al precio.
+        - manufacturing_cost <= price → el costo de fabricación no puede exceder el precio de venta.
+        - price >= 0 → no tener precios negativos
 
 # Estructura del proyecto
     project/

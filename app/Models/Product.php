@@ -6,10 +6,34 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
     use HasFactory;
+
+    protected static function booted(): void
+    {
+        static::created(function (self $product): void {
+            $product->syncBasePrice();
+        });
+
+        static::updated(function (self $product): void {
+            if (! $product->wasChanged(['price', 'currency_id'])) {
+                return;
+            }
+
+            DB::transaction(function () use ($product): void {
+                if ($product->wasChanged('currency_id')) {
+                    $product->prices()
+                        ->where('currency_id', $product->getOriginal('currency_id'))
+                        ->delete();
+                }
+
+                $product->syncBasePrice();
+            });
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -48,5 +72,13 @@ class Product extends Model
     public function prices(): HasMany
     {
         return $this->hasMany(ProductPrice::class);
+    }
+
+    public function syncBasePrice(): void
+    {
+        $this->prices()->updateOrCreate(
+            ['currency_id' => $this->currency_id],
+            ['price' => $this->price],
+        );
     }
 }

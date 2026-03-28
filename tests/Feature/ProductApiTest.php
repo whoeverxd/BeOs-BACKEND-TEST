@@ -66,6 +66,12 @@ class ProductApiTest extends TestCase
             'name' => 'Monitor',
             'currency_id' => $currency->id,
         ]);
+
+        $this->assertDatabaseHas('product_prices', [
+            'product_id' => $response->json('id'),
+            'currency_id' => $currency->id,
+            'price' => 399.99,
+        ]);
     }
 
     public function test_a_product_can_be_retrieved_updated_and_deleted(): void
@@ -101,6 +107,12 @@ class ProductApiTest extends TestCase
             ->assertOk()
             ->assertHeader('content-type', 'application/json')
             ->assertJsonPath('name', 'Mouse Pro');
+
+        $this->assertDatabaseHas('product_prices', [
+            'product_id' => $product->id,
+            'currency_id' => $currency->id,
+            'price' => 30.00,
+        ]);
 
         $this->deleteJson("/api/products/{$product->id}")
             ->assertNoContent();
@@ -142,8 +154,10 @@ class ProductApiTest extends TestCase
         $this->getJson("/api/products/{$product->id}/prices")
             ->assertOk()
             ->assertHeader('content-type', 'application/json')
-            ->assertJsonCount(1)
-            ->assertJsonPath('0.currency.symbol', 'USD');
+            ->assertJsonCount(2)
+            ->assertJsonPath('0.currency.symbol', 'COP')
+            ->assertJsonPath('0.price', '3500000.00')
+            ->assertJsonPath('1.currency.symbol', 'USD');
 
         $eurCurrency = Currency::create([
             'name' => 'Euro',
@@ -163,6 +177,64 @@ class ProductApiTest extends TestCase
         $this->assertDatabaseHas('product_prices', [
             'product_id' => $product->id,
             'currency_id' => $eurCurrency->id,
+        ]);
+    }
+
+    public function test_base_price_is_recreated_when_product_base_currency_changes(): void
+    {
+        $usdCurrency = Currency::create([
+            'name' => 'Dolar estadounidense',
+            'symbol' => 'USD',
+            'exchange_rate' => 1,
+        ]);
+
+        $eurCurrency = Currency::create([
+            'name' => 'Euro',
+            'symbol' => 'EUR',
+            'exchange_rate' => 0.92,
+        ]);
+
+        $gbpCurrency = Currency::create([
+            'name' => 'Libra esterlina',
+            'symbol' => 'GBP',
+            'exchange_rate' => 0.85,
+        ]);
+
+        $product = Product::create([
+            'name' => 'Laptop Base',
+            'description' => 'Producto con precio base.',
+            'price' => 1000,
+            'currency_id' => $usdCurrency->id,
+            'tax_cost' => 120,
+            'manufacturing_cost' => 500,
+        ]);
+
+        ProductPrice::create([
+            'product_id' => $product->id,
+            'currency_id' => $gbpCurrency->id,
+            'price' => 850,
+        ]);
+
+        $this->putJson("/api/products/{$product->id}", [
+            'name' => 'Laptop Base',
+            'description' => 'Producto con precio base.',
+            'price' => 950,
+            'currency_id' => $eurCurrency->id,
+            'tax_cost' => 120,
+            'manufacturing_cost' => 500,
+        ])
+            ->assertOk();
+
+        $this->assertDatabaseMissing('product_prices', [
+            'product_id' => $product->id,
+            'currency_id' => $usdCurrency->id,
+            'price' => 1000,
+        ]);
+
+        $this->assertDatabaseHas('product_prices', [
+            'product_id' => $product->id,
+            'currency_id' => $eurCurrency->id,
+            'price' => 950,
         ]);
     }
 
@@ -227,6 +299,94 @@ class ProductApiTest extends TestCase
                 'message' => 'Los datos enviados no son validos.',
                 'errors' => [
                     'name' => ['The name field is required.'],
+                ],
+            ]);
+    }
+
+    public function test_store_rejects_negative_price_and_costs_greater_than_price(): void
+    {
+        $currency = Currency::create([
+            'name' => 'Peso colombiano',
+            'symbol' => 'COP',
+            'exchange_rate' => 1,
+        ]);
+
+        $this->postJson('/api/products', [
+            'name' => 'Laptop Pro 14',
+            'description' => 'Laptop profesional de 14 pulgadas para trabajo y desarrollo.',
+            'price' => -1499,
+            'currency_id' => $currency->id,
+            'tax_cost' => 284.81,
+            'manufacturing_cost' => 890,
+        ])
+            ->assertUnprocessable()
+            ->assertJson([
+                'message' => 'Los datos enviados no son validos.',
+                'errors' => [
+                    'price' => ['El precio no puede ser negativo.'],
+                    'tax_cost' => ['El impuesto no puede ser mayor al precio.'],
+                    'manufacturing_cost' => ['El costo de fabricacion no puede exceder el precio de venta.'],
+                ],
+            ]);
+    }
+
+    public function test_update_rejects_costs_greater_than_price(): void
+    {
+        $currency = Currency::create([
+            'name' => 'Peso colombiano',
+            'symbol' => 'COP',
+            'exchange_rate' => 1,
+        ]);
+
+        $product = Product::create([
+            'name' => 'Laptop Pro 14',
+            'description' => 'Laptop profesional de 14 pulgadas para trabajo y desarrollo.',
+            'price' => 1499,
+            'currency_id' => $currency->id,
+            'tax_cost' => 284.81,
+            'manufacturing_cost' => 890,
+        ]);
+
+        $this->putJson("/api/products/{$product->id}", [
+            'name' => 'Laptop Pro 14',
+            'description' => 'Laptop profesional de 14 pulgadas para trabajo y desarrollo.',
+            'price' => 100,
+            'currency_id' => $currency->id,
+            'tax_cost' => 120,
+            'manufacturing_cost' => 110,
+        ])
+            ->assertUnprocessable()
+            ->assertJson([
+                'message' => 'Los datos enviados no son validos.',
+                'errors' => [
+                    'tax_cost' => ['El impuesto no puede ser mayor al precio.'],
+                    'manufacturing_cost' => ['El costo de fabricacion no puede exceder el precio de venta.'],
+                ],
+            ]);
+    }
+
+    public function test_store_rejects_negative_tax_and_manufacturing_costs(): void
+    {
+        $currency = Currency::create([
+            'name' => 'Peso colombiano',
+            'symbol' => 'COP',
+            'exchange_rate' => 1,
+        ]);
+
+        $this->postJson('/api/products', [
+            'name' => 'baby dont say no',
+            'description' => 'Laptop profesional de 14 pulgadas para trabajo y desarrollo.',
+            'price' => 1499,
+            'currency_id' => $currency->id,
+            'tax_cost' => -284.81,
+            'manufacturing_cost' => -890,
+        ])
+            ->assertUnprocessable()
+            ->assertJson([
+                'message' => 'Los datos enviados no son validos.',
+                'errors' => [
+                    'tax_cost' => ['El impuesto no puede ser negativo.'],
+                    'manufacturing_cost' => ['El costo de fabricacion no puede ser negativo.'],
                 ],
             ]);
     }

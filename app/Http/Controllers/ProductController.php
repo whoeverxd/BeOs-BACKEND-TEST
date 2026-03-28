@@ -75,14 +75,10 @@ class ProductController extends Controller
     )]
     public function store(Request $request): JsonResponse
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
-            'price' => ['required', 'numeric'],
-            'currency_id' => ['required', 'integer', 'exists:currencies,id'],
-            'tax_cost' => ['required', 'numeric'],
-            'manufacturing_cost' => ['required', 'numeric'],
-        ]);
+        $validated = $request->validate(
+            $this->productValidationRules(),
+            $this->productValidationMessages(),
+        );
 
         $product = Product::create($validated)->load('currency');
 
@@ -141,19 +137,38 @@ class ProductController extends Controller
     )]
     public function update(Request $request, Product $product): JsonResponse
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
-            'price' => ['required', 'numeric'],
-            'currency_id' => ['required', 'integer', 'exists:currencies,id'],
-            'tax_cost' => ['required', 'numeric'],
-            'manufacturing_cost' => ['required', 'numeric'],
-        ]);
+        $validated = $request->validate(
+            $this->productValidationRules(),
+            $this->productValidationMessages(),
+        );
 
         $product->update($validated);
         $product->load('currency');
 
         return response()->json($product);
+    }
+
+    private function productValidationRules(): array
+    {
+        return [
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'price' => ['required', 'numeric', 'gte:0'],
+            'currency_id' => ['required', 'integer', 'exists:currencies,id'],
+            'tax_cost' => ['required', 'numeric', 'gte:0', 'lte:price'],
+            'manufacturing_cost' => ['required', 'numeric', 'gte:0', 'lte:price'],
+        ];
+    }
+
+    private function productValidationMessages(): array
+    {
+        return [
+            'price.gte' => 'El precio no puede ser negativo.',
+            'tax_cost.gte' => 'El impuesto no puede ser negativo.',
+            'tax_cost.lte' => 'El impuesto no puede ser mayor al precio.',
+            'manufacturing_cost.gte' => 'El costo de fabricacion no puede ser negativo.',
+            'manufacturing_cost.lte' => 'El costo de fabricacion no puede exceder el precio de venta.',
+        ];
     }
 
     #[OAT\Delete(
