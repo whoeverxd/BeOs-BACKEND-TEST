@@ -1,0 +1,420 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "BeOs Backend Test API",
+        "description": "Documentacion de la API para gestion de productos, divisas y precios.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Servidor local"
+        }
+    ],
+    "paths": {
+        "/api/products": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Obtener lista de productos",
+                "description": "Retorna todos los productos con su divisa asociada",
+                "operationId": "getProducts",
+                "responses": {
+                    "200": {
+                        "description": "Lista de productos en formato JSON",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Laptop Pro 14"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "Laptop profesional de 14 pulgadas para trabajo y desarrollo."
+                                            },
+                                            "price": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 1499
+                                            },
+                                            "currency_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "tax_cost": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 284.81
+                                            },
+                                            "manufacturing_cost": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 890
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Crear un producto",
+                "description": "Crea un nuevo producto en la base de datos",
+                "operationId": "storeProduct",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "description",
+                                    "price",
+                                    "currency_id",
+                                    "tax_cost",
+                                    "manufacturing_cost"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Laptop Pro 14"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Laptop profesional de 14 pulgadas para trabajo y desarrollo."
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1499
+                                    },
+                                    "currency_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "tax_cost": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 284.81
+                                    },
+                                    "manufacturing_cost": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 890
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Producto creado correctamente"
+                    },
+                    "422": {
+                        "description": "Error de validacion"
+                    }
+                }
+            }
+        },
+        "/api/products/{id}": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Obtener un producto por ID",
+                "description": "Retorna un producto con su divisa asociada",
+                "operationId": "showProduct",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del producto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Producto encontrado"
+                    },
+                    "404": {
+                        "description": "Producto no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Actualizar un producto",
+                "description": "Actualiza un producto existente",
+                "operationId": "updateProduct",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del producto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "description",
+                                    "price",
+                                    "currency_id",
+                                    "tax_cost",
+                                    "manufacturing_cost"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Laptop Pro 14"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Laptop profesional de 14 pulgadas para trabajo y desarrollo."
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1499
+                                    },
+                                    "currency_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "tax_cost": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 284.81
+                                    },
+                                    "manufacturing_cost": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 890
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Producto actualizado correctamente"
+                    },
+                    "404": {
+                        "description": "Producto no encontrado"
+                    },
+                    "422": {
+                        "description": "Error de validacion"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Eliminar un producto",
+                "description": "Elimina un producto existente",
+                "operationId": "destroyProduct",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del producto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Producto eliminado correctamente"
+                    },
+                    "404": {
+                        "description": "Producto no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/products/{product}/prices": {
+            "get": {
+                "tags": [
+                    "Product Prices"
+                ],
+                "summary": "Obtener lista de precios de un producto",
+                "description": "Retorna todos los precios de un producto en sus diferentes divisas",
+                "operationId": "getProductPrices",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "description": "ID del producto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de precios del producto en formato JSON",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "product_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "currency_id": {
+                                                "type": "integer",
+                                                "example": 2
+                                            },
+                                            "price": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 1379
+                                            },
+                                            "currency": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Euro"
+                                                    },
+                                                    "symbol": {
+                                                        "type": "string",
+                                                        "example": "EUR"
+                                                    },
+                                                    "exchange_rate": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 0.92
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Producto no encontrado"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Product Prices"
+                ],
+                "summary": "Crear un nuevo precio para un producto",
+                "description": "Crea un precio adicional para un producto en una divisa especifica",
+                "operationId": "storeProductPrice",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "description": "ID del producto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "currency_id",
+                                    "price"
+                                ],
+                                "properties": {
+                                    "currency_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1379
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Precio creado correctamente"
+                    },
+                    "404": {
+                        "description": "Producto no encontrado"
+                    },
+                    "422": {
+                        "description": "Error de validacion"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Products",
+            "description": "Products"
+        },
+        {
+            "name": "Product Prices",
+            "description": "Product Prices"
+        }
+    ]
+}

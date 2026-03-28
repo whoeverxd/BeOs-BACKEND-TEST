@@ -2,6 +2,7 @@
     API RESTful desarrollada en Laravel para la gestión de productos y sus precios en múltiples divisas. Permite operaciones CRUD y manejo de conversiones utilizando tasas de cambio almacenadas en base de datos.
 
 
+
 # Decisiones técnicas
     - He Cambiado los nombre de los modelos a ingles para mantener la coherencia, ya que los campos estan en español. Suelo ser mas purista y respetar las instrucciones y nombres del proyecto pero en este caso me di la libertad para lograr algo mas elegante.
     - las rutas como  path: '/api/products/{id}', usan Usar Route Model Binding para manejar 404 automáticamente es buena práctica, limpia y segura. pero considero que al ser un API REST deberia implementar public function render($request, Throwable $exception)
@@ -89,11 +90,18 @@ Notas
 • La API debe devolver los datos en formato JSON.
 • La API debe tener una documentación clara y concisa.
 
+# posibles mejoras
+    - soft delete
+    - laravel sanctum + auth
 
 # DOCUMENTACION
 
     - para la documentacion se ha añadido swagger al proyecto y se han documentado las rutas
+    - ruta base de la API: http://127.0.0.1:8000/api
     - se ha añadido tambien la carpeta /docs con el "export" de Postman
+    - archivo Swagger/OpenAPI generado: /docs/openapi.json
+    - interfaz Swagger local: http://127.0.0.1:8000/api/documentation#/
+    - para regenerarlo: php artisan l5-swagger:generate
 
 
 
