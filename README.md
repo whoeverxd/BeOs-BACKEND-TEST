@@ -4,38 +4,34 @@
 
 
 # Decisiones técnicas
-    - He Cambiado los nombre de los modelos a ingles para mantener la coherencia, ya que los campos estan en español. Suelo ser mas purista y respetar las instrucciones y nombres del proyecto pero en este caso me di la libertad para lograr algo mas elegante.
-    - las rutas como  path: '/api/products/{id}', usan Usar Route Model Binding para manejar 404 automáticamente es buena práctica, limpia y segura. pero considero que al ser un API REST deberia implementar public function render($request, Throwable $exception)
-        {
-            if ($exception instanceof ModelNotFoundException) {
-                return response()->json([
-                    'message' => 'Recurso no encontrado'
-                ], 404);
-            }
 
-            return parent::render($request, $exception);
-        }
-    Para mantener la consistencia.
+- Renombré los modelos a inglés para mantener consistencia en el dominio, aunque varios campos permanecen en español.
+- Las rutas como `/api/products/{id}` usan Route Model Binding, lo que simplifica el manejo de recursos inexistentes.
+- Para mantener consistencia en una API REST, ajusté el manejo global de excepciones para que los errores `404` respondan siempre en JSON, tanto cuando falla el route model binding como cuando la ruta API no existe.
+- También hice un ajuste global en `bootstrap/app.php` para que las `ValidationException` respondan siempre en JSON dentro de `/api/*`.
+- El campo `price` en `products` se maneja como precio base del producto y `product_prices` almacena los precios equivalentes en otras divisas.
 
-    como resolucion Ajusté el manejo global de excepciones para que las rutas de la API respondan JSON en errores 404, tanto cuando falla el route model binding como cuando la ruta API no existe
+Ejemplo de precio base:
 
-    - tambien hice ajuste global en el bootstrap para ValidationException
-    - Pienso en usar price en products como “precio base” => product_prices almacenará precios en otras divisas.
-          - ejemplo : product.price = 1000
-                      product.currency_id = 1 (USD)
-                        product_prices: 
-                        - currency_id = 1, price = 1000 (precio base)
-                        - currency_id = 2, price = 950 (EUR)
-                        - currency_id = 3, price = 850 (GBP)
-    - Ademas se verifica que no pueda haber mas de un precio en la misma moneda para un producto. incluyendo el precio base
-      - si por ejemplo la moneda esta en dolares, y el precio es $500. entonces no permitiremos que se añada otra moneda/precio en dolares
+```text
+products.price = 1000
+products.currency_id = 1 (USD)
 
-    # Decisiones sobre la logica 
+product_prices:
+- currency_id = 1, price = 1000 (precio base)
+- currency_id = 2, price = 950 (EUR)
+- currency_id = 3, price = 850 (GBP)
+```
 
-        - tax_cost <= price → el impuesto no puede ser mayor al precio.
-        - manufacturing_cost <= price → el costo de fabricación no puede exceder el precio de venta.
-        - price >= 0 → no tener precios negativos
-        - Campos decimales como price, tax_cost y manufacturing_cost pueden enviarse como strings numéricos en JSON y Laravel los valida correctamente con numeric.
+- Se valida que no pueda existir más de un precio para la misma moneda en un mismo producto, incluyendo la moneda base.
+- Si el producto tiene como moneda base USD, no se permite crear otra relación en `product_prices` con esa misma moneda.
+
+## Decisiones sobre la lógica
+
+- `tax_cost <= price`: el impuesto no puede ser mayor al precio.
+- `manufacturing_cost <= price`: el costo de fabricación no puede exceder el precio de venta.
+- `price >= 0`: no se permiten precios negativos.
+- Campos decimales como `price`, `tax_cost` y `manufacturing_cost` pueden enviarse como strings numéricos en JSON y Laravel los valida correctamente con `numeric`.
 
 # Estructura del proyecto
     project/
