@@ -1,0 +1,865 @@
+{
+  "info": {
+    "_postman_id": "589f55c4-277e-43a3-9ac8-1d804a47ea1f",
+    "name": "BeOs Backend Test API",
+    "description": "Documentacion de la API para gestion de productos, divisas y precios.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "16900870"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "products",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Obtener un producto por ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/products/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "products",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "1",
+                          "description": "ID del producto"
+                        }
+                      ]
+                    },
+                    "description": "Retorna un producto con su divisa asociada"
+                  },
+                  "response": [
+                    {
+                      "name": "Producto encontrado",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/products/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "products",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "1",
+                              "description": "ID del producto"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": null
+                    },
+                    {
+                      "name": "Producto no encontrado",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/products/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "products",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "1",
+                              "description": "ID del producto"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": null
+                    }
+                  ]
+                },
+                {
+                  "name": "Actualizar un producto",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Laptop Pro 14\",\n  \"description\": \"Laptop profesional de 14 pulgadas para trabajo y desarrollo.\",\n  \"price\": 1499,\n  \"currency_id\": 1,\n  \"tax_cost\": 284.81,\n  \"manufacturing_cost\": 890\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/products/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "products",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "1",
+                          "description": "ID del producto"
+                        }
+                      ]
+                    },
+                    "description": "Actualiza un producto existente"
+                  },
+                  "response": [
+                    {
+                      "name": "Producto actualizado correctamente",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"Laptop Pro 14\",\n  \"description\": \"Laptop profesional de 14 pulgadas para trabajo y desarrollo.\",\n  \"price\": 1499,\n  \"currency_id\": 1,\n  \"tax_cost\": 284.81,\n  \"manufacturing_cost\": 890\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/products/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "products",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "1",
+                              "description": "ID del producto"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": null
+                    },
+                    {
+                      "name": "Producto no encontrado",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"Laptop Pro 14\",\n  \"description\": \"Laptop profesional de 14 pulgadas para trabajo y desarrollo.\",\n  \"price\": 1499,\n  \"currency_id\": 1,\n  \"tax_cost\": 284.81,\n  \"manufacturing_cost\": 890\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/products/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "products",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "1",
+                              "description": "ID del producto"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": null
+                    },
+                    {
+                      "name": "Error de validacion",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"Laptop Pro 14\",\n  \"description\": \"Laptop profesional de 14 pulgadas para trabajo y desarrollo.\",\n  \"price\": 1499,\n  \"currency_id\": 1,\n  \"tax_cost\": 284.81,\n  \"manufacturing_cost\": 890\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/products/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "products",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "1",
+                              "description": "ID del producto"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+                      "code": 422,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": null
+                    }
+                  ]
+                },
+                {
+                  "name": "Eliminar un producto",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/products/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "products",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "1",
+                          "description": "ID del producto"
+                        }
+                      ]
+                    },
+                    "description": "Elimina un producto existente"
+                  },
+                  "response": [
+                    {
+                      "name": "Producto eliminado correctamente",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/products/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "products",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "1",
+                              "description": "ID del producto"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "No Content",
+                      "code": 204,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": null
+                    },
+                    {
+                      "name": "Producto no encontrado",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/products/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "products",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "1",
+                              "description": "ID del producto"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": null
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "{product}",
+              "item": [
+                {
+                  "name": "prices",
+                  "item": [
+                    {
+                      "name": "Obtener lista de precios de un producto",
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/products/:product/prices",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "products",
+                            ":product",
+                            "prices"
+                          ],
+                          "variable": [
+                            {
+                              "key": "product",
+                              "value": "1",
+                              "description": "ID del producto"
+                            }
+                          ]
+                        },
+                        "description": "Retorna todos los precios de un producto en sus diferentes divisas"
+                      },
+                      "response": [
+                        {
+                          "name": "Lista de precios del producto en formato JSON",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/products/:product/prices",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "products",
+                                ":product",
+                                "prices"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "product",
+                                  "value": "1",
+                                  "description": "ID del producto"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "[\n  {\n    \"id\": 1,\n    \"product_id\": 1,\n    \"currency_id\": 2,\n    \"price\": 1379,\n    \"currency\": {\n      \"id\": 2,\n      \"name\": \"Euro\",\n      \"symbol\": \"EUR\",\n      \"exchange_rate\": 0.92\n    }\n  },\n  {\n    \"id\": 1,\n    \"product_id\": 1,\n    \"currency_id\": 2,\n    \"price\": 1379,\n    \"currency\": {\n      \"id\": 2,\n      \"name\": \"Euro\",\n      \"symbol\": \"EUR\",\n      \"exchange_rate\": 0.92\n    }\n  }\n]"
+                        },
+                        {
+                          "name": "Producto no encontrado",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/products/:product/prices",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "products",
+                                ":product",
+                                "prices"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "product",
+                                  "value": "1",
+                                  "description": "ID del producto"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": null
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Crear un nuevo precio para un producto",
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"currency_id\": 2,\n  \"price\": 1379\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/products/:product/prices",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "products",
+                            ":product",
+                            "prices"
+                          ],
+                          "variable": [
+                            {
+                              "key": "product",
+                              "value": "1",
+                              "description": "ID del producto"
+                            }
+                          ]
+                        },
+                        "description": "Crea un precio adicional para un producto en una divisa especifica"
+                      },
+                      "response": [
+                        {
+                          "name": "Precio creado correctamente",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"currency_id\": 2,\n  \"price\": 1379\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/products/:product/prices",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "products",
+                                ":product",
+                                "prices"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "product",
+                                  "value": "1",
+                                  "description": "ID del producto"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Created",
+                          "code": 201,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": null
+                        },
+                        {
+                          "name": "Producto no encontrado",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"currency_id\": 2,\n  \"price\": 1379\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/products/:product/prices",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "products",
+                                ":product",
+                                "prices"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "product",
+                                  "value": "1",
+                                  "description": "ID del producto"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": null
+                        },
+                        {
+                          "name": "Error de validacion",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"currency_id\": 2,\n  \"price\": 1379\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/products/:product/prices",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "products",
+                                ":product",
+                                "prices"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "product",
+                                  "value": "1",
+                                  "description": "ID del producto"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+                          "code": 422,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": null
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Obtener lista de productos",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/products",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "products"
+                  ]
+                },
+                "description": "Retorna todos los productos con su divisa asociada"
+              },
+              "response": [
+                {
+                  "name": "Lista de productos en formato JSON",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/products",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "products"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "[\n  {\n    \"id\": 1,\n    \"name\": \"Laptop Pro 14\",\n    \"description\": \"Laptop profesional de 14 pulgadas para trabajo y desarrollo.\",\n    \"price\": 1499,\n    \"currency_id\": 1,\n    \"tax_cost\": 284.81,\n    \"manufacturing_cost\": 890\n  },\n  {\n    \"id\": 1,\n    \"name\": \"Laptop Pro 14\",\n    \"description\": \"Laptop profesional de 14 pulgadas para trabajo y desarrollo.\",\n    \"price\": 1499,\n    \"currency_id\": 1,\n    \"tax_cost\": 284.81,\n    \"manufacturing_cost\": 890\n  }\n]"
+                }
+              ]
+            },
+            {
+              "name": "Crear un producto",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Laptop Pro 14\",\n  \"description\": \"Laptop profesional de 14 pulgadas para trabajo y desarrollo.\",\n  \"price\": 1499,\n  \"currency_id\": 1,\n  \"tax_cost\": 284.81,\n  \"manufacturing_cost\": 890\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/products",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "products"
+                  ]
+                },
+                "description": "Crea un nuevo producto en la base de datos"
+              },
+              "response": [
+                {
+                  "name": "Producto creado correctamente",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Laptop Pro 14\",\n  \"description\": \"Laptop profesional de 14 pulgadas para trabajo y desarrollo.\",\n  \"price\": 1499,\n  \"currency_id\": 1,\n  \"tax_cost\": 284.81,\n  \"manufacturing_cost\": 890\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/products",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "products"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": null
+                },
+                {
+                  "name": "Error de validacion",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Laptop Pro 14\",\n  \"description\": \"Laptop profesional de 14 pulgadas para trabajo y desarrollo.\",\n  \"price\": 1499,\n  \"currency_id\": 1,\n  \"tax_cost\": 284.81,\n  \"manufacturing_cost\": 890\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/products",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "products"
+                      ]
+                    }
+                  },
+                  "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+                  "code": 422,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": null
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    }
+  ]
+}
