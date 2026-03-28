@@ -34,18 +34,39 @@ product_prices:
 - Campos decimales como `price`, `tax_cost` y `manufacturing_cost` pueden enviarse como strings numéricos en JSON y Laravel los valida correctamente con `numeric`.
 
 # Estructura del proyecto
-    project/
-    │
-    ├── app/
-    ├── database/
-    ├── routes/api.php
-    │
-    ├── docs/
-    │   ├── postman_collection.json
-        tests/
-
-    │
-    ├── README.md
+```text
+BeOs-BACKEND-TEST/
+├── app/
+│   ├── Http/
+│   │   └── Controllers/
+│   │       ├── ProductController.php
+│   │       └── ProductPriceController.php
+│   ├── Models/
+│   │   ├── Currency.php
+│   │   ├── Product.php
+│   │   └── ProductPrice.php
+│   └── OpenApi.php
+├── bootstrap/
+│   └── app.php
+├── database/
+│   ├── migrations/
+│   │   ├── 2026_03_27_000002_create_currencies_table.php
+│   │   ├── 2026_03_27_000003_create_products_table.php
+│   │   └── 2026_03_27_000004_create_product_prices_table.php
+│   └── seeders/
+│       ├── CurrencySeeder.php
+│       ├── ProductSeeder.php
+│       └── ProductPriceSeeder.php
+├── docs/
+│   ├── BeOs Backend Test API.postman_collection.json
+│   └── openapi.json
+├── routes/
+│   └── api.php
+├── tests/
+│   └── Feature/
+│       └── ProductApiTest.php
+└── README.md
+```
 
 
 ## Modelos
